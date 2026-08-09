@@ -43,6 +43,13 @@
 
 <header class="t-header-wrapper">
   <div class="t-header-container">
+    <button class="t-menu-toggle">
+      <span class="t-hamburger">
+        <i></i><i></i><i></i>
+      </span>
+      <span class="t-close-icon">&times;</span>
+    </button>
+
     <div class="t-header-logo">
       <a href="{{ section.settings.logo_link | default: routes.root_url }}">{{ section.settings.logo_text }}</a>
     </div>
@@ -52,10 +59,19 @@
     </div>
     
     <div class="t-header-action">
-      <a href="{{ section.settings.btn_link }}" class="t-header-btn">
-        {{ section.settings.btn_label }} <span class="arrow">&rarr;</span>
+      <a href="{{ section.settings.btn_link }}" class="t-anim-btn">
+        <span class="t-btn-text">{{ section.settings.btn_label }}</span>
+        <span class="t-btn-arrow">&rarr;</span>
       </a>
     </div>
+  </div>
+
+  <div class="t-mobile-dropdown">
+    <p>{{ section.settings.middle_text }}</p>
+    <a href="{{ section.settings.btn_link }}" class="t-anim-btn">
+      <span class="t-btn-text">{{ section.settings.btn_label }}</span>
+      <span class="t-btn-arrow">&rarr;</span>
+    </a>
   </div>
 </header>
 
@@ -65,17 +81,57 @@
     background-color: #f5f5f5;
     border-bottom: 1px solid #eaeaea;
     font-family: sans-serif;
+    position: relative;
+    z-index: 100;
   }
   .t-header-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 15px 30px;
-    max-width: 100%;
-    margin: 0 auto;
+    justify-content: center;
+    padding: 15px 20px;
+    position: relative;
+    background-color: #f5f5f5;
+    z-index: 2;
+  }
+  .t-menu-toggle {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .t-hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .t-hamburger i {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #000;
+  }
+  .t-close-icon {
+    display: none;
+    font-size: 26px;
+    line-height: 1;
+    font-weight: 300;
+  }
+  .t-header-container.is-open .t-hamburger {
+    display: none;
+  }
+  .t-header-container.is-open .t-close-icon {
+    display: block;
   }
   .t-header-logo a {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     letter-spacing: 2px;
     color: #000000;
@@ -84,40 +140,119 @@
   .t-header-middle {
     display: none;
   }
-  .t-header-middle p {
-    margin: 0;
-    font-size: 14px;
+  .t-header-action {
+    display: none;
+  }
+  
+  .t-mobile-dropdown {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 20px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #eaeaea;
+    text-align: center;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    z-index: 1;
+    box-sizing: border-box;
+  }
+  .t-header-container.is-open + .t-mobile-dropdown {
+    display: flex;
+  }
+  .t-mobile-dropdown p {
+    margin: 0 0 20px 0;
+    font-size: 13px;
     color: #000000;
   }
-  .t-header-btn {
+
+  .t-anim-btn {
+    position: relative;
     display: inline-flex;
     align-items: center;
     background-color: #FFEE32;
     color: #000000;
     text-decoration: none;
-    padding: 12px 24px;
-    font-size: 13px;
+    padding: 12px 28px;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 1px;
-    transition: background-color 0.3s ease;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
   }
-  .t-header-btn:hover {
-    background-color: #e6db2d;
+  .t-anim-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: #000000;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 0;
   }
-  .t-header-btn .arrow {
-    margin-left: 8px;
-    transition: transform 0.3s ease;
+  .t-anim-btn:hover::before {
+    width: 100%;
   }
-  .t-header-btn:hover .arrow {
-    transform: translateX(4px);
+  .t-btn-text, .t-btn-arrow {
+    position: relative;
+    z-index: 1;
+    transition: color 0.4s ease;
+  }
+  .t-anim-btn:hover .t-btn-text, 
+  .t-anim-btn:hover .t-btn-arrow {
+    color: #ffffff;
+  }
+  .t-btn-arrow {
+    margin-left: 10px;
+    transition: transform 0.3s ease, color 0.4s ease;
+  }
+  .t-anim-btn:hover .t-btn-arrow {
+    transform: translateX(5px);
   }
 
   @media screen and (min-width: 768px) {
+    .t-header-container {
+      justify-content: space-between;
+      padding: 15px 40px;
+    }
+    .t-menu-toggle {
+      display: none;
+    }
+    .t-header-logo a {
+      font-size: 20px;
+    }
     .t-header-middle {
       display: block;
     }
-    .t-header-container {
-      padding: 15px 40px;
+    .t-header-middle p {
+      margin: 0;
+      font-size: 14px;
+      color: #000000;
     }
-  }
+    .t-header-action {
+      display: block;
+    }
+    .t-mobile-dropdown {
+      display: none !important;
+    }
+  } 
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('.t-menu-toggle');
+    const headerContainer = document.querySelector('.t-header-container');
+    
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        headerContainer.classList.toggle('is-open');
+      });
+    }
+  });
+</script>

@@ -10,36 +10,29 @@
       "label": "Section Heading",
       "default": "Tisso vison in the wild"
     },
-    {
-      "type": "product",
-      "id": "product_1",
-      "label": "Product 1"
-    },
-    {
-      "type": "product",
-      "id": "product_2",
-      "label": "Product 2"
-    },
-    {
-      "type": "product",
-      "id": "product_3",
-      "label": "Product 3"
-    },
-    {
-      "type": "product",
-      "id": "product_4",
-      "label": "Product 4"
-    },
-    {
-      "type": "product",
-      "id": "product_5",
-      "label": "Product 5"
-    },
-    {
-      "type": "product",
-      "id": "product_6",
-      "label": "Product 6"
-    }
+    { "type": "product", "id": "product_1", "label": "Product 1" },
+    { "type": "range", "id": "pos_x_1", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 1 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_1", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 1 Top", "default": 50 },
+    
+    { "type": "product", "id": "product_2", "label": "Product 2" },
+    { "type": "range", "id": "pos_x_2", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 2 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_2", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 2 Top", "default": 50 },
+
+    { "type": "product", "id": "product_3", "label": "Product 3" },
+    { "type": "range", "id": "pos_x_3", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 3 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_3", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 3 Top", "default": 50 },
+
+    { "type": "product", "id": "product_4", "label": "Product 4" },
+    { "type": "range", "id": "pos_x_4", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 4 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_4", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 4 Top", "default": 50 },
+
+    { "type": "product", "id": "product_5", "label": "Product 5" },
+    { "type": "range", "id": "pos_x_5", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 5 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_5", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 5 Top", "default": 50 },
+
+    { "type": "product", "id": "product_6", "label": "Product 6" },
+    { "type": "range", "id": "pos_x_6", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 6 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_6", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 6 Top", "default": 50 }
   ],
   "presets": [
     {
@@ -56,15 +49,20 @@
     {% endif %}
 
     <div class="t-wild-grid">
-      {% assign products_array = "product_1,product_2,product_3,product_4,product_5,product_6" | split: "," %}
-      
-      {% for prod_key in products_array %}
+      {% for i in (1..6) %}
+        {% assign prod_key = 'product_' | append: i %}
+        {% assign x_key = 'pos_x_' | append: i %}
+        {% assign y_key = 'pos_y_' | append: i %}
+        
         {% assign prod = section.settings[prod_key] %}
+        {% assign pos_x = section.settings[x_key] %}
+        {% assign pos_y = section.settings[y_key] %}
+
         {% if prod != blank %}
           <div class="t-wild-card">
             <div class="t-wild-image-wrapper">
               <img src="{{ prod.featured_image | img_url: 'master' }}" alt="{{ prod.title }}">
-              <button class="t-hotspot-btn">+</button>
+              <button class="t-hotspot-btn" style="left: {{ pos_x }}%; top: {{ pos_y }}%;">+</button>
             </div>
 
             <div class="t-quick-popup">
@@ -87,23 +85,31 @@
 
               <div class="t-p-variants">
                 {% for option in prod.options_with_values %}
-                  <div class="t-option-group">
-                    <label class="t-opt-label">{{ option.name }}</label>
-                    {% assign d_name = option.name | downcase %}
-                    {% if d_name == 'color' or d_name == 'colour' %}
+                  {% assign d_name = option.name | downcase %}
+                  {% if d_name == 'color' or d_name == 'colour' %}
+                    <div class="t-option-group">
+                      <label class="t-opt-label">{{ option.name }}</label>
                       <div class="t-option-selector t-color-options">
                         {% for value in option.values %}
                           <button class="t-color-btn {% if forloop.first %}active{% endif %}" data-value="{{ value | escape }}">{{ value }}</button>
                         {% endfor %}
                       </div>
-                    {% else %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+
+                {% for option in prod.options_with_values %}
+                  {% assign d_name = option.name | downcase %}
+                  {% if d_name != 'color' and d_name != 'colour' %}
+                    <div class="t-option-group">
+                      <label class="t-opt-label">{{ option.name }}</label>
                       <select class="t-option-selector t-select-option">
                         {% for value in option.values %}
                           <option value="{{ value | escape }}">{{ value }}</option>
                         {% endfor %}
                       </select>
-                    {% endif %}
-                  </div>
+                    </div>
+                  {% endif %}
                 {% endfor %}
               </div>
 
@@ -120,7 +126,7 @@
 
 <style>
   .t-wild-section {
-    padding: 60px 20px;
+    padding: 40px 15px;
     background: #e8e8e8;
     font-family: sans-serif;
   }
@@ -129,20 +135,16 @@
     margin: 0 auto;
   }
   .t-wild-title {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 400;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     color: #111;
+    text-align: center;
   }
   .t-wild-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  @media screen and (min-width: 768px) {
-    .t-wild-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
   .t-wild-card {
     position: relative;
@@ -151,7 +153,7 @@
   .t-wild-image-wrapper {
     position: relative;
     width: 100%;
-    height: 400px;
+    height: 220px;
   }
   .t-wild-image-wrapper img {
     width: 100%;
@@ -160,20 +162,21 @@
   }
   .t-hotspot-btn {
     position: absolute;
-    top: 50%;
-    left: 80%;
     transform: translate(-50%, -50%);
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.9);
+    color: #000;
     border: none;
-    font-size: 18px;
+    font-size: 14px;
+    line-height: 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 2;
   }
   .t-quick-popup {
     display: none;
@@ -181,16 +184,16 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 320px;
+    width: 300px;
     background: #fff;
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    padding: 20px;
+    padding: 15px;
     z-index: 10;
   }
   .t-close-popup {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 5px;
+    right: 10px;
     background: none;
     border: none;
     font-size: 20px;
@@ -199,40 +202,40 @@
   .t-popup-header {
     display: flex;
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     margin-top: 10px;
   }
   .t-popup-img img {
-    width: 90px;
-    height: 110px;
+    width: 70px;
+    height: 90px;
     object-fit: cover;
   }
   .t-popup-info {
     flex: 1;
   }
   .t-p-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
     margin: 0 0 5px;
   }
   .t-p-price {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
-    margin: 0 0 10px;
+    margin: 0 0 8px;
   }
   .t-p-desc {
-    font-size: 11px;
+    font-size: 10px;
     color: #555;
     line-height: 1.3;
   }
   .t-p-variants {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 15px;
   }
   .t-opt-label {
-    font-size: 12px;
+    font-size: 11px;
     margin-bottom: 5px;
     display: block;
   }
@@ -242,12 +245,12 @@
   }
   .t-color-btn {
     flex: 1;
-    padding: 10px;
+    padding: 8px;
     border: 1px solid #000;
     background: #fff;
     color: #000;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
   }
   .t-color-btn.active {
     background: #000;
@@ -255,9 +258,9 @@
   }
   .t-select-option {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     border: 1px solid #ccc;
-    font-size: 13px;
+    font-size: 12px;
     background: #fff;
     cursor: pointer;
   }
@@ -266,8 +269,8 @@
     background: #000;
     color: #fff;
     border: none;
-    padding: 14px;
-    font-size: 12px;
+    padding: 12px;
+    font-size: 11px;
     letter-spacing: 1px;
     cursor: pointer;
     transition: background 0.3s;
@@ -278,6 +281,28 @@
   .t-add-to-cart-btn:disabled {
     background: #aaa;
     cursor: not-allowed;
+  }
+
+  @media screen and (min-width: 768px) {
+    .t-wild-section {
+      padding: 60px 20px;
+    }
+    .t-wild-title {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+    .t-wild-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .t-wild-image-wrapper {
+      height: 400px;
+    }
+    .t-hotspot-btn {
+      width: 26px;
+      height: 26px;
+      font-size: 18px;
+    }
   }
 </style>
 

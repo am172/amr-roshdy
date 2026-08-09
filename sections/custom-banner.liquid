@@ -54,6 +54,11 @@
 
 <div class="t-banner-wrapper">
   <div class="t-banner-main">
+    <div class="t-banner-text-box">
+      <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
+      <p class="t-banner-sub">{{ section.settings.subtext }}</p>
+    </div>
+    
     <div class="t-banner-image">
       {% if section.settings.banner_image != blank %}
         <picture>
@@ -66,14 +71,13 @@
         {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
       {% endif %}
     </div>
-    <div class="t-banner-content-box">
-      <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
-      <p class="t-banner-sub">{{ section.settings.subtext }}</p>
-      <a href="{{ section.settings.btn_link }}" class="t-banner-btn">
-        {{ section.settings.btn_label }} <span class="arrow-icon">&rarr;</span>
-      </a>
-    </div>
+
+    <a href="{{ section.settings.btn_link }}" class="t-anim-banner-btn">
+      <span class="t-btn-text">{{ section.settings.btn_label }}</span>
+      <span class="t-btn-arrow">&rarr;</span>
+    </a>
   </div>
+  
   <div class="t-banner-footer">
     <p>{{ section.settings.bottom_text }}</p>
   </div>
@@ -82,31 +86,21 @@
 <style>
   .t-banner-wrapper {
     width: 100%;
-    display: flex;
-    flex-direction: column;
     background-color: #ffffff;
     font-family: sans-serif;
     overflow: hidden;
   }
   .t-banner-main {
-    display: flex;
-    flex-direction: column-reverse;
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
   }
-  .t-banner-image {
-    width: 100%;
-    display: flex;
-  }
-  .t-banner-image img, .t-banner-image svg {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-  .t-banner-content-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .t-banner-text-box {
+    grid-column: 1;
+    grid-row: 1;
     text-align: center;
-    padding: 40px 20px 10px 20px;
+    padding: 40px 20px 20px 20px;
+    z-index: 2;
   }
   .t-banner-heading {
     font-size: 32px;
@@ -115,34 +109,75 @@
     color: #000000;
   }
   .t-banner-sub {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.5;
-    margin: 0 0 20px 0;
+    margin: 0;
     color: #000000;
   }
-  .t-banner-btn {
+  .t-banner-image {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    display: flex;
+    z-index: 1;
+  }
+  .t-banner-image img, .t-banner-image svg {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .t-anim-banner-btn {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    align-self: end;
+    margin-bottom: 15%;
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background-color: #000000;
     color: #ffffff;
     text-decoration: none;
-    padding: 14px 28px;
+    padding: 14px 32px;
     font-size: 14px;
+    font-weight: 500;
     letter-spacing: 1px;
     text-transform: uppercase;
-    z-index: 10;
-    transition: background-color 0.3s ease;
+    overflow: hidden;
+    z-index: 3;
+    border: none;
+    cursor: pointer;
   }
-  .t-banner-btn:hover {
-    background-color: #333333;
+  .t-anim-banner-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: #FFEE32;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: -1;
   }
-  .t-banner-btn .arrow-icon {
-    margin-left: 12px;
-    transition: transform 0.3s ease;
+  .t-anim-banner-btn:hover::before {
+    width: 100%;
   }
-  .t-banner-btn:hover .arrow-icon {
-    transform: translateX(6px);
+  .t-btn-text, .t-btn-arrow {
+    position: relative;
+    z-index: 1;
+    transition: color 0.4s ease;
+  }
+  .t-anim-banner-btn:hover .t-btn-text,
+  .t-anim-banner-btn:hover .t-btn-arrow {
+    color: #000000;
+  }
+  .t-btn-arrow {
+    margin-left: 10px;
+    transition: transform 0.3s ease, color 0.4s ease;
+  }
+  .t-anim-banner-btn:hover .t-btn-arrow {
+    transform: translateX(5px);
   }
   .t-banner-footer {
     background-color: #f5f5f5;
@@ -159,33 +194,41 @@
 
   @media screen and (min-width: 768px) {
     .t-banner-main {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr;
-      min-height: 500px;
+      padding: 80px 5%;
+      min-height: 550px;
+      grid-template-rows: auto auto 1fr;
     }
     .t-banner-image {
+      grid-row: 1 / span 3;
       grid-column: 1 / -1;
-      grid-row: 1 / -1;
-      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
     .t-banner-image img {
       height: 100%;
-      object-position: center;
+      object-position: right center;
     }
-    .t-banner-content-box {
-      grid-column: 1 / -1;
-      grid-row: 1 / -1;
-      z-index: 2;
-      align-self: end;
-      justify-self: start;
+    .t-banner-text-box {
+      grid-row: 1;
+      grid-column: 1;
       text-align: left;
-      align-items: flex-start;
-      padding: 40px 5%;
+      padding: 0;
       max-width: 50%;
+      align-self: end;
     }
     .t-banner-heading {
       font-size: 48px;
+    }
+    .t-anim-banner-btn {
+      grid-row: 2;
+      grid-column: 1;
+      justify-self: start;
+      align-self: start;
+      margin-top: 20px;
+      margin-bottom: 0;
     }
   }
 </style>
