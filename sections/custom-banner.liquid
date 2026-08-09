@@ -1,0 +1,187 @@
+{% schema %}
+{
+  "name": "Custom Banner",
+  "tag": "section",
+  "class": "t-banner-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Gift Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "bottom_text",
+      "label": "Bottom Bar Text",
+      "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Banner"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="t-banner-wrapper">
+  <div class="t-banner-main">
+    <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
+    <p class="t-banner-sub">{{ section.settings.subtext }}</p>
+    <div class="t-banner-image">
+      {% if section.settings.banner_image != blank %}
+        <img src="{{ section.settings.banner_image | img_url: 'master' }}" alt="{{ section.settings.heading }}">
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+    <a href="{{ section.settings.btn_link }}" class="t-banner-btn">
+      {{ section.settings.btn_label }} <span class="arrow-icon">&rarr;</span>
+    </a>
+  </div>
+  <div class="t-banner-footer">
+    <p>{{ section.settings.bottom_text }}</p>
+  </div>
+</div>
+
+<style>
+  .t-banner-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  .t-banner-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px 20px 20px;
+  }
+  .t-banner-heading {
+    order: 1;
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    color: #000000;
+  }
+  .t-banner-sub {
+    order: 2;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    max-width: 400px;
+    color: #000000;
+  }
+  .t-banner-image {
+    order: 3;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .t-banner-image img, .t-banner-image svg {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .t-banner-btn {
+    order: 4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px 28px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: -40px;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+  }
+  .t-banner-btn:hover {
+    background-color: #333333;
+  }
+  .t-banner-btn .arrow-icon {
+    margin-left: 12px;
+    transition: transform 0.3s ease;
+  }
+  .t-banner-btn:hover .arrow-icon {
+    transform: translateX(6px);
+  }
+  .t-banner-footer {
+    background-color: #f5f5f5;
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #000000;
+    border-top: 1px solid #eaeaea;
+  }
+  .t-banner-footer p {
+    margin: 0;
+  }
+
+  @media screen and (min-width: 768px) {
+    .t-banner-main {
+      display: grid;
+      grid-template-columns: 40% 55%;
+      gap: 20px 5%;
+      text-align: left;
+      padding: 60px 5%;
+      align-items: start;
+    }
+    .t-banner-heading {
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 48px;
+      margin-bottom: 0;
+      align-self: end;
+    }
+    .t-banner-sub {
+      grid-column: 1;
+      grid-row: 2;
+      margin: 20px 0 40px 0;
+      align-self: start;
+    }
+    .t-banner-btn {
+      grid-column: 1;
+      grid-row: 3;
+      margin-top: 0;
+      align-self: start;
+      justify-self: start;
+    }
+    .t-banner-image {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      align-self: center;
+      justify-content: flex-end;
+    }
+  }
+</style>
