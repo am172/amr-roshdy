@@ -115,6 +115,7 @@
         "btn_label": "SHOP NOW",
         "btn_link": "",
         "banner_image": "shopify://shop_images/bunner-laptop.png",
+        "mobile_image": "shopify://shop_images/bunner-mobile.png",
         "bottom_text": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
       }
     }
