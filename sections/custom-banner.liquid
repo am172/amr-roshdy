@@ -56,7 +56,10 @@
   <div class="t-banner-main">
     <div class="t-banner-text-box">
       <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
-      <p class="t-banner-sub">{{ section.settings.subtext }}</p>
+      <p class="t-banner-sub">
+        <span class="t-sub-mobile">{{ section.settings.subtext | split: '.' | first }}.</span>
+        <span class="t-sub-desktop">{{ section.settings.subtext }}</span>
+      </p>
     </div>
     
     <div class="t-banner-image">
@@ -116,7 +119,13 @@
     line-height: 1.5;
     margin: 0;
     color: #000000;
-    max-width: 300px; /* ده اللي بيلم النص في الموبايل زي الفيجما */
+    max-width: 300px; 
+  }
+  .t-sub-mobile {
+    display: inline;
+  }
+  .t-sub-desktop {
+    display: none;
   }
   .t-banner-image {
     grid-column: 1;
@@ -205,10 +214,10 @@
     .t-banner-main {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: flex-start;
-      padding: 80px 5%;
-      min-height: 550px;
+      padding: 160px 5% 80px 5%; /* زقينا المحتوى لتحت بزيادة الـ top padding */
+      min-height: 600px;
     }
     .t-banner-image {
       position: absolute;
@@ -232,6 +241,12 @@
     }
     .t-banner-sub {
       max-width: 100%; 
+    }
+    .t-sub-mobile {
+      display: none;
+    }
+    .t-sub-desktop {
+      display: inline;
     }
     .t-banner-heading {
       font-size: 48px;
