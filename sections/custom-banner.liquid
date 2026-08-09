@@ -245,69 +245,61 @@
     color: #000000;
   }
 
-  @media screen and (min-width: 768px) {
-    .t-banner-main {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: flex-start;
-      padding: 50px 5% 70px 5%;
-      height: auto;
-      min-height: 650px;
-    }
-    .t-banner-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-    .t-banner-image img {
-      height: 100%;
-      width: 100%;
-      object-fit: fill;
-      object-position: center;
-    }
-    .t-banner-text-box {
-      position: relative;
-      z-index: 2;
-      padding: 0;
-      max-width: 483px;
-      align-items: flex-start;
-      text-align: left;
-    }
-    .t-banner-sub {
-      font-size: 20px;
-      line-height: 1.4;
-      max-width: 483px; 
-      text-align: left;
-    }
-    .t-sub-mobile {
-      display: none;
-    }
-    .t-sub-desktop {
-      display: inline;
-    }
-    .t-banner-heading {
-      font-size: 70px;
-      margin-bottom: 20px;
-      text-align: left;
-    }
-    .t-anim-banner-btn {
-      position: relative;
-      z-index: 2;
-      align-self: flex-start;
-      margin-top: 30px;
-      margin-bottom: 0;
-      width: 220px;
-      height: 50px;
-    }
-    .t-footer-desktop {
-      display: block;
-    }
-    .t-footer-mobile {
-      display: none;
-    }
+ @media screen and (min-width: 768px) {
+  .t-banner-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 50px 5% 70px 5%;
+    height: 650px;        /* ← بدل height: auto */
+    min-height: 650px;
   }
+  .t-banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  .t-banner-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;    /* ← بدل fill */
+    object-position: center;
+  }
+  .t-banner-text-box {
+    position: relative;
+    z-index: 2;
+    padding: 0;
+    max-width: 483px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .t-banner-sub {
+    font-size: 20px;
+    line-height: 1.4;
+    max-width: 483px; 
+    text-align: left;
+  }
+  .t-sub-mobile { display: none; }
+  .t-sub-desktop { display: inline; }
+  .t-banner-heading {
+    font-size: 70px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .t-anim-banner-btn {
+    position: relative;
+    z-index: 2;
+    align-self: flex-start;
+    margin-top: 30px;
+    margin-bottom: 0;
+    width: 220px;
+    height: 50px;
+  }
+  .t-footer-desktop { display: block; }
+  .t-footer-mobile { display: none; }
+}
 </style>
