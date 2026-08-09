@@ -1,0 +1,123 @@
+{% schema %}
+{
+  "name": "Custom Header",
+  "tag": "section",
+  "class": "t-header-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo Text",
+      "default": "TISSO VISON"
+    },
+    {
+      "type": "url",
+      "id": "logo_link",
+      "label": "Logo Link"
+    },
+    {
+      "type": "text",
+      "id": "middle_text",
+      "label": "Middle Text",
+      "default": "Find the ideal gift for your loved ones."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "CHOOSE GIFT"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Header"
+    }
+  ]
+}
+{% endschema %}
+
+<header class="t-header-wrapper">
+  <div class="t-header-container">
+    <div class="t-header-logo">
+      <a href="{{ section.settings.logo_link | default: routes.root_url }}">{{ section.settings.logo_text }}</a>
+    </div>
+    
+    <div class="t-header-middle">
+      <p>{{ section.settings.middle_text }}</p>
+    </div>
+    
+    <div class="t-header-action">
+      <a href="{{ section.settings.btn_link }}" class="t-header-btn">
+        {{ section.settings.btn_label }} <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .t-header-wrapper {
+    width: 100%;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #eaeaea;
+    font-family: sans-serif;
+  }
+  .t-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .t-header-logo a {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #000000;
+    text-decoration: none;
+  }
+  .t-header-middle {
+    display: none;
+  }
+  .t-header-middle p {
+    margin: 0;
+    font-size: 14px;
+    color: #000000;
+  }
+  .t-header-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #FFEE32;
+    color: #000000;
+    text-decoration: none;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+  }
+  .t-header-btn:hover {
+    background-color: #e6db2d;
+  }
+  .t-header-btn .arrow {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+  }
+  .t-header-btn:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  @media screen and (min-width: 768px) {
+    .t-header-middle {
+      display: block;
+    }
+    .t-header-container {
+      padding: 15px 40px;
+    }
+  }
+</style>
