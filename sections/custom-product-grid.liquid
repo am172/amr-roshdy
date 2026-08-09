@@ -61,41 +61,56 @@
       {% for prod_key in products_array %}
         {% assign prod = section.settings[prod_key] %}
         {% if prod != blank %}
-          <div class="t-wild-card" data-product-id="{{ prod.id }}">
+          <div class="t-wild-card">
             <div class="t-wild-image-wrapper">
-              {% if prod.featured_image != blank %}
-                <img src="{{ prod.featured_image | img_url: 'master' }}" alt="{{ prod.title }}">
-              {% else %}
-                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-              {% endif %}
-              
-              <!-- زرار الزائد -->
-              <button class="t-hotspot-btn" aria-label="Quick view">+</button>
+              <img src="{{ prod.featured_image | img_url: 'master' }}" alt="{{ prod.title }}">
+              <button class="t-hotspot-btn">+</button>
             </div>
 
-            <!-- بوب أب المنتج الخاص بهذا الكارد -->
-            <div class="t-quick-popup" style="display: none;">
+            <div class="t-quick-popup">
               <button class="t-close-popup">&times;</button>
-              <div class="t-popup-content">
+              
+              <div class="t-popup-header">
                 <div class="t-popup-img">
                   <img src="{{ prod.featured_image | img_url: 'medium' }}" alt="{{ prod.title }}">
                 </div>
-                <div class="t-popup-details">
+                <div class="t-popup-info">
                   <h3 class="t-p-title">{{ prod.title }}</h3>
                   <p class="t-p-price">{{ prod.price | money }}</p>
-                  <div class="t-p-desc">{{ prod.description | truncatewords: 20 }}</div>
-
-                  <div class="t-p-variants" data-variants='{{ prod.variants | json }}'>
-                    <!-- سيتم توليد الفاريانتس ديناميكياً بالـ JS -->
-                  </div>
-
-                  <button class="t-add-to-cart-btn" data-variant-id="{{ prod.selected_or_first_available_variant.id }}">
-                    ADD TO CART &rarr;
-                  </button>
+                  <div class="t-p-desc">{{ prod.description | strip_html | truncatewords: 12 }}</div>
                 </div>
               </div>
-            </div>
 
+              <script type="application/json" class="t-variants-json">
+                {{ prod.variants | json }}
+              </script>
+
+              <div class="t-p-variants">
+                {% for option in prod.options_with_values %}
+                  <div class="t-option-group">
+                    <label class="t-opt-label">{{ option.name }}</label>
+                    {% assign d_name = option.name | downcase %}
+                    {% if d_name == 'color' or d_name == 'colour' %}
+                      <div class="t-option-selector t-color-options">
+                        {% for value in option.values %}
+                          <button class="t-color-btn {% if forloop.first %}active{% endif %}" data-value="{{ value | escape }}">{{ value }}</button>
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                      <select class="t-option-selector t-select-option">
+                        {% for value in option.values %}
+                          <option value="{{ value | escape }}">{{ value }}</option>
+                        {% endfor %}
+                      </select>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+
+              <button class="t-add-to-cart-btn" data-variant-id="{{ prod.selected_or_first_available_variant.id }}">
+                ADD TO CART &rarr;
+              </button>
+            </div>
           </div>
         {% endif %}
       {% endfor %}
@@ -106,11 +121,11 @@
 <style>
   .t-wild-section {
     padding: 60px 20px;
-    background: #fff;
+    background: #e8e8e8;
     font-family: sans-serif;
   }
   .t-wild-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
   }
   .t-wild-title {
@@ -121,7 +136,7 @@
   }
   .t-wild-grid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr;
     gap: 20px;
   }
   @media screen and (min-width: 768px) {
@@ -131,12 +146,12 @@
   }
   .t-wild-card {
     position: relative;
-    overflow: hidden;
+    background: #fff;
   }
   .t-wild-image-wrapper {
     position: relative;
     width: 100%;
-    height: 450px;
+    height: 400px;
   }
   .t-wild-image-wrapper img {
     width: 100%;
@@ -145,37 +160,32 @@
   }
   .t-hotspot-btn {
     position: absolute;
-    bottom: 30px;
-    right: 30px;
-    width: 36px;
-    height: 36px;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
     border: none;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
-  .t-hotspot-btn:hover {
-    background: #fff;
-  }
-
-  /* تصميم البوب أب */
   .t-quick-popup {
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 380px;
+    width: 320px;
     background: #fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    padding: 25px;
-    z-index: 100;
-    box-sizing: border-box;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    padding: 20px;
+    z-index: 10;
   }
   .t-close-popup {
     position: absolute;
@@ -183,142 +193,189 @@
     right: 15px;
     background: none;
     border: none;
-    font-size: 22px;
+    font-size: 20px;
     cursor: pointer;
   }
-  .t-popup-content {
+  .t-popup-header {
     display: flex;
-    flex-direction: column;
     gap: 15px;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
   .t-popup-img img {
-    width: 100%;
-    height: 180px;
+    width: 90px;
+    height: 110px;
     object-fit: cover;
   }
+  .t-popup-info {
+    flex: 1;
+  }
   .t-p-title {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 400;
     margin: 0 0 5px;
   }
   .t-p-price {
     font-size: 15px;
-    color: #333;
+    font-weight: 600;
     margin: 0 0 10px;
   }
   .t-p-desc {
+    font-size: 11px;
+    color: #555;
+    line-height: 1.3;
+  }
+  .t-p-variants {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  .t-opt-label {
     font-size: 12px;
-    color: #666;
-    line-height: 1.4;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .t-color-options {
+    display: flex;
+    width: 100%;
+  }
+  .t-color-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .t-color-btn.active {
+    background: #000;
+    color: #fff;
+  }
+  .t-select-option {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    background: #fff;
+    cursor: pointer;
   }
   .t-add-to-cart-btn {
     width: 100%;
     background: #000;
     color: #fff;
     border: none;
-    padding: 12px;
-    font-size: 13px;
+    padding: 14px;
+    font-size: 12px;
     letter-spacing: 1px;
     cursor: pointer;
-    text-transform: uppercase;
     transition: background 0.3s;
   }
   .t-add-to-cart-btn:hover {
     background: #333;
   }
-  .t-variant-group {
-    margin-bottom: 12px;
-  }
-  .t-variant-label {
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 5px;
-    display: block;
-  }
-  .t-variant-options {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .t-var-option {
-    padding: 6px 12px;
-    font-size: 12px;
-    border: 1px solid #ddd;
-    background: #fff;
-    cursor: pointer;
-  }
-  .t-var-option.active {
-    border-color: #000;
-    background: #000;
-    color: #fff;
+  .t-add-to-cart-btn:disabled {
+    background: #aaa;
+    cursor: not-allowed;
   }
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".t-wild-card");
 
     cards.forEach(card => {
       const hotspot = card.querySelector(".t-hotspot-btn");
       const popup = card.querySelector(".t-quick-popup");
       const closeBtn = card.querySelector(".t-close-popup");
-      const variantsContainer = card.querySelector(".t-p-variants");
-      const addToCartBtn = card.querySelector(".t-add-to-cart-btn");
+      const addBtn = card.querySelector(".t-add-to-cart-btn");
+      const priceEl = card.querySelector(".t-p-price");
+      const variantsData = JSON.parse(card.querySelector(".t-variants-json").textContent);
 
-      if (!hotspot || !popup) return;
-
-      // فتح البوب أب
       hotspot.addEventListener("click", () => {
-        // إغلاق أي بوب أب مفتوح تاني
         document.querySelectorAll(".t-quick-popup").forEach(p => p.style.display = "none");
         popup.style.display = "block";
-        renderVariants();
       });
 
-      // إغلاق البوب أب
       closeBtn.addEventListener("click", () => {
         popup.style.display = "none";
       });
 
-      // رندرة الفاريانتس ديناميكياً
-      function renderVariants() {
-        if (variantsContainer.dataset.rendered) return;
-        const variantsData = JSON.parse(variantsContainer.dataset.variants);
-        
-        // جلب خيارات الأوبشنز (Color, Size, etc.)
-        // ولتسهيل التطبيق، هنعرض الـ variants المتاحة
-        let html = '';
-        variantsData.forEach((variant, index) => {
-          if(variant.available) {
-            // لو حابب تعرضهم كأزرار بسيطة
+      const updateVariant = () => {
+        let selected = [];
+        card.querySelectorAll(".t-option-selector").forEach(selector => {
+          if (selector.tagName === "SELECT") {
+            selected.push(selector.value);
+          } else {
+            const active = selector.querySelector(".active");
+            selected.push(active ? active.dataset.value : "");
           }
         });
-        
-        variantsContainer.dataset.rendered = "true";
-      }
 
-      // وظيفة الإضافة للسلة + شرط الجاكيت الـ Soft Winter Jacket
-      addToCartBtn.addEventListener("click", () => {
-        const variantId = addToCartBtn.dataset.variantId;
-        
-        // بيانات الإضافة للسلة
-        let itemsToAdd = [{ id: variantId, quantity: 1 }];
+        const matched = variantsData.find(v => v.options.every((opt, i) => opt === selected[i]));
 
-        // هنا بنشيك لو الفاريانت المحدد هو Black و Medium (كمثال تطبيقي للشرط)
-        // أو هنبعت طلب الإضافة للسلة عبر Shopify Ajax API
-        fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: itemsToAdd })
+        if (matched) {
+          addBtn.dataset.variantId = matched.id;
+          addBtn.disabled = !matched.available;
+          addBtn.textContent = matched.available ? "ADD TO CART \u2192" : "SOLD OUT";
+          priceEl.textContent = (matched.price / 100).toFixed(2) + "€";
+        }
+      };
+
+      card.querySelectorAll(".t-color-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const parent = e.target.closest(".t-color-options");
+          parent.querySelectorAll(".t-color-btn").forEach(b => b.classList.remove("active"));
+          e.target.classList.add("active");
+          updateVariant();
+        });
+      });
+
+      card.querySelectorAll(".t-select-option").forEach(select => {
+        select.addEventListener("change", updateVariant);
+      });
+
+      updateVariant();
+
+      addBtn.addEventListener("click", async () => {
+        const vId = addBtn.dataset.variantId;
+        const currentVariant = variantsData.find(v => v.id == vId);
+        
+        let items = [{ id: vId, quantity: 1 }];
+
+        const isBlack = currentVariant.options.some(o => o.toLowerCase() === "black");
+        const isMedium = currentVariant.options.some(o => o.toLowerCase() === "medium" || o.toLowerCase() === "m");
+
+        if (isBlack && isMedium) {
+          try {
+            const res = await fetch("/products/soft-winter-jacket.js");
+            if (res.ok) {
+              const extraProduct = await res.json();
+              if (extraProduct.variants && extraProduct.variants.length > 0) {
+                items.push({ id: extraProduct.variants[0].id, quantity: 1 });
+              }
+            }
+          } catch (err) {}
+        }
+
+        addBtn.textContent = "ADDING...";
+
+        fetch("/cart/add.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items })
         })
-        .then(response => response.json())
-        .then(data => {
-          alert("Added to cart successfully!");
-          popup.style.display = "none";
+        .then(res => res.json())
+        .then(() => {
+          addBtn.textContent = "ADDED!";
+          setTimeout(() => {
+            addBtn.textContent = "ADD TO CART \u2192";
+            popup.style.display = "none";
+          }, 1500);
         })
-        .catch((error) => {
-          console.error('Error:', error);
+        .catch(() => {
+          addBtn.textContent = "ERROR";
         });
       });
     });
