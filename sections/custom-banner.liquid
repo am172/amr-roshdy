@@ -247,15 +247,14 @@
 
   @media screen and (min-width: 768px) {
     .t-banner-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding: 50px 5% 70px 5%;
-   height: 100vh;
-max-height: 650px;
-min-height: 500px;
-  }
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 50px 5% 70px 5%;
+      height: auto;
+      min-height: 650px;
+    }
     .t-banner-image {
       position: absolute;
       top: 0;
@@ -267,7 +266,7 @@ min-height: 500px;
     .t-banner-image img {
       height: 100%;
       width: 100%;
-      object-fit: cover;
+      object-fit: fill;
       object-position: center;
     }
     .t-banner-text-box {
