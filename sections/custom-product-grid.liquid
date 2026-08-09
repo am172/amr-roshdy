@@ -367,9 +367,10 @@
     }
   }
 </style>
-
 <script>
+  // Wait for the DOM to fully load before running the script
   document.addEventListener("DOMContentLoaded", () => {
+    // Select all product cards in the grid section
     const cards = document.querySelectorAll(".t-wild-card");
 
     cards.forEach(card => {
@@ -380,15 +381,18 @@
       const priceEl = card.querySelector(".t-p-price");
       const variantsData = JSON.parse(card.querySelector(".t-variants-json").textContent);
 
+      // Open popup on hotspot click and close any other open popups
       hotspot.addEventListener("click", () => {
         document.querySelectorAll(".t-quick-popup").forEach(p => p.style.display = "none");
         popup.style.display = "block";
       });
 
+      // Close the popup when clicking the close button
       closeBtn.addEventListener("click", () => {
         popup.style.display = "none";
       });
 
+      // Update variant details and price based on user selection
       const updateVariant = () => {
         let selected = [];
         card.querySelectorAll(".t-option-selector").forEach(selector => {
@@ -410,6 +414,7 @@
         }
       };
 
+      // Handle color swatch button selection
       card.querySelectorAll(".t-color-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
           const parent = e.target.closest(".t-color-options");
@@ -419,18 +424,21 @@
         });
       });
 
+      // Handle size dropdown changes
       card.querySelectorAll(".t-select-option").forEach(select => {
         select.addEventListener("change", updateVariant);
       });
 
       updateVariant();
 
+      // Handle Add to Cart button click via AJAX including the automatic jacket rule
       addBtn.addEventListener("click", async () => {
         const vId = addBtn.dataset.variantId;
         const currentVariant = variantsData.find(v => v.id == vId);
         
         let items = [{ id: vId, quantity: 1 }];
 
+        // Check if selected variant is Black and Medium to add the winter jacket automatically
         const isBlack = currentVariant.options.some(o => o.toLowerCase() === "black");
         const isMedium = currentVariant.options.some(o => o.toLowerCase() === "medium" || o.toLowerCase() === "m");
 
