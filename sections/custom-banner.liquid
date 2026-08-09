@@ -249,56 +249,56 @@
     color: #000000;
   }
 
-@media screen and (min-width: 768px) {
-  .t-banner-main {
-    display: block;
-    position: relative;
-    width: 100%;
+  @media screen and (min-width: 768px) {
+    .t-banner-main {
+      display: block;
+      position: relative;
+      width: 100%;
+    }
+    .t-banner-image {
+      position: relative;
+      width: 100%;
+      display: block;
+      z-index: 1;
+    }
+    .t-banner-image img {
+      width: 100%;
+      height: auto;       
+      display: block;
+    }
+    .t-banner-text-box {
+      position: absolute;
+      bottom: clamp(60px, 11vw, 160px); 
+      left: 5%;
+      z-index: 2;
+      padding: 0;
+      max-width: 483px;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .t-banner-sub {
+      font-size: clamp(16px, 1.6vw, 20px);
+      line-height: 1.4;
+      max-width: 483px;
+      text-align: left;
+    }
+    .t-sub-mobile { display: none; }
+    .t-sub-desktop { display: inline; }
+    .t-banner-heading {
+      font-size: clamp(42px, 5vw, 70px);
+      margin-bottom: clamp(10px, 1.5vw, 20px);
+      text-align: left;
+    }
+    .t-anim-banner-btn {
+      position: absolute;
+      bottom: clamp(20px, 3vw, 44px);
+      left: 5%;
+      z-index: 2;
+      margin: 0;
+      width: clamp(180px, 15vw, 220px);
+      height: clamp(42px, 3.5vw, 50px);
+    }
+    .t-footer-desktop { display: block; }
+    .t-footer-mobile { display: none; }
   }
-  .t-banner-image {
-    position: relative;
-    width: 100%;
-    display: block;
-    z-index: 1;
-  }
-  .t-banner-image img {
-    width: 100%;
-    height: auto;      
-    display: block;
-  }
-  .t-banner-text-box {
-  position: absolute;
-  bottom: 160px;   
-  left: 5%;
-  z-index: 2;
-  padding: 0;
-  max-width: 483px;
-  align-items: flex-start;
-  text-align: left;
-}
-  .t-banner-sub {
-    font-size: 20px;
-    line-height: 1.4;
-    max-width: 483px;
-    text-align: left;
-  }
-  .t-sub-mobile { display: none; }
-  .t-sub-desktop { display: inline; }
-  .t-banner-heading {
-    font-size: 70px;
-    margin-bottom: 20px;
-    text-align: left;
-  }
-  .t-anim-banner-btn {
-    position: absolute;
-    bottom: 44px;
-    left: 5%;
-    z-index: 2;
-    margin: 0;
-    width: 220px;
-    height: 50px;
-  }
-  .t-footer-desktop { display: block; }
-  .t-footer-mobile { display: none; }
-}
 </style>
