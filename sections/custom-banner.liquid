@@ -1,0 +1,300 @@
+{% schema %}
+{
+  "name": "Custom Banner",
+  "tag": "section",
+  "class": "t-banner-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Gift Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Desktop Banner Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "bottom_text",
+      "label": "Desktop Bottom Bar Text",
+      "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+    },
+    {
+      "type": "text",
+      "id": "bottom_text_mobile",
+      "label": "Mobile Bottom Bar Text",
+      "default": "SUSTAINABLE, ETHICALLY MADE ACTIVEWEAR"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Banner"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="t-banner-wrapper">
+  <div class="t-banner-main">
+    <div class="t-banner-text-box">
+      <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
+      <p class="t-banner-sub">
+        <span class="t-sub-mobile">{{ section.settings.subtext | split: '.' | first }}.</span>
+        <span class="t-sub-desktop">{{ section.settings.subtext }}</span>
+      </p>
+    </div>
+    
+    <div class="t-banner-image">
+      {% if section.settings.banner_image != blank %}
+        <picture>
+          {% if section.settings.mobile_image != blank %}
+            <source media="(max-width: 767px)" srcset="{{ section.settings.mobile_image | img_url: 'master' }}">
+          {% endif %}
+          <img src="{{ section.settings.banner_image | img_url: 'master' }}" alt="{{ section.settings.heading }}">
+        </picture>
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+
+    <a href="{{ section.settings.btn_link }}" class="t-anim-banner-btn">
+      <span class="t-btn-text">{{ section.settings.btn_label }}</span>
+      <span class="t-btn-arrow">&rarr;</span>
+    </a>
+  </div>
+  
+  <div class="t-banner-footer">
+    <p class="t-footer-desktop">{{ section.settings.bottom_text }}</p>
+    <p class="t-footer-mobile">{{ section.settings.bottom_text_mobile }}</p>
+  </div>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap');
+
+  .t-banner-wrapper {
+    width: 100%;
+    background-color: #ffffff;
+    font-family: 'Jost', sans-serif;
+    overflow: hidden;
+  }
+  .t-banner-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+  .t-banner-text-box {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: center;
+    padding: 49px 20px 30px 20px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .t-banner-heading {
+    font-family: 'Jost', sans-serif;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0px;
+    margin: 0 0 15px 0;
+    color: #000000;
+    text-align: center;
+  }
+  .t-banner-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0px;
+    margin: 0;
+    color: #000000;
+    max-width: 340px; 
+    text-align: center;
+  }
+  .t-sub-mobile {
+    display: inline;
+  }
+  .t-sub-desktop {
+    display: none;
+  }
+  .t-banner-image {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    display: flex;
+    z-index: 1;
+  }
+  .t-banner-image picture {
+    width: 100%;
+    display: flex;
+  }
+  .t-banner-image img, .t-banner-image svg {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .t-anim-banner-btn {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    align-self: end;
+    margin-bottom: 30px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #ffffff;
+    text-decoration: none;
+    width: 193px;
+    height: 45px;
+    box-sizing: border-box;
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20.48px;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    overflow: hidden;
+    z-index: 3;
+    border: none;
+    cursor: pointer;
+  }
+  .t-anim-banner-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: #FFEE32;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: -1;
+  }
+  .t-anim-banner-btn:hover::before {
+    width: 100%;
+  }
+  .t-btn-text, .t-btn-arrow {
+    position: relative;
+    z-index: 1;
+    transition: color 0.4s ease;
+  }
+  .t-anim-banner-btn:hover .t-btn-text,
+  .t-anim-banner-btn:hover .t-btn-arrow {
+    color: #000000;
+  }
+  .t-btn-arrow {
+    margin-left: 10px;
+    transition: transform 0.3s ease, color 0.4s ease;
+  }
+  .t-anim-banner-btn:hover .t-btn-arrow {
+    transform: translateX(5px);
+  }
+  .t-banner-footer {
+    background-color: #F5F5F5;
+    text-align: center;
+    padding: 15px 20px;
+    border-top: 1px solid #eaeaea;
+  }
+  .t-banner-footer p {
+    margin: 0;
+  }
+  .t-footer-desktop {
+    display: none;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13.42px;
+    letter-spacing: 0px;
+    color: #000000;
+  }
+  .t-footer-mobile {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 13.42px;
+    letter-spacing: 0px;
+    color: #000000;
+  }
+
+@media screen and (min-width: 768px) {
+  .t-banner-main {
+    display: block;
+    position: relative;
+    width: 100%;
+  }
+  .t-banner-image {
+    position: relative;
+    width: 100%;
+    display: block;
+    z-index: 1;
+  }
+  .t-banner-image img {
+    width: 100%;
+    height: auto;      
+    display: block;
+  }
+  .t-banner-text-box {
+  position: absolute;
+  bottom: 160px;   
+  left: 5%;
+  z-index: 2;
+  padding: 0;
+  max-width: 483px;
+  align-items: flex-start;
+  text-align: left;
+}
+  .t-banner-sub {
+    font-size: 20px;
+    line-height: 1.4;
+    max-width: 483px;
+    text-align: left;
+  }
+  .t-sub-mobile { display: none; }
+  .t-sub-desktop { display: inline; }
+  .t-banner-heading {
+    font-size: 70px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .t-anim-banner-btn {
+    position: absolute;
+    bottom: 44px;
+    left: 5%;
+    z-index: 2;
+    margin: 0;
+    width: 220px;
+    height: 50px;
+  }
+  .t-footer-desktop { display: block; }
+  .t-footer-mobile { display: none; }
+}
+</style>

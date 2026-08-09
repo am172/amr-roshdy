@@ -1,0 +1,470 @@
+{% schema %}
+{
+  "name": "Tisso Wild Grid",
+  "tag": "section",
+  "class": "t-wild-grid-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Tisso vison in the wild"
+    },
+    { "type": "product", "id": "product_1", "label": "Product 1" },
+    { "type": "range", "id": "pos_x_1", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 1 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_1", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 1 Top", "default": 50 },
+    
+    { "type": "product", "id": "product_2", "label": "Product 2" },
+    { "type": "range", "id": "pos_x_2", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 2 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_2", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 2 Top", "default": 50 },
+
+    { "type": "product", "id": "product_3", "label": "Product 3" },
+    { "type": "range", "id": "pos_x_3", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 3 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_3", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 3 Top", "default": 50 },
+
+    { "type": "product", "id": "product_4", "label": "Product 4" },
+    { "type": "range", "id": "pos_x_4", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 4 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_4", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 4 Top", "default": 50 },
+
+    { "type": "product", "id": "product_5", "label": "Product 5" },
+    { "type": "range", "id": "pos_x_5", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 5 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_5", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 5 Top", "default": 50 },
+
+    { "type": "product", "id": "product_6", "label": "Product 6" },
+    { "type": "range", "id": "pos_x_6", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 6 Left", "default": 50 },
+    { "type": "range", "id": "pos_y_6", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Hotspot 6 Top", "default": 50 }
+  ],
+  "presets": [
+    {
+      "name": "Tisso Wild Grid"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="t-wild-section">
+  <div class="t-wild-container">
+    {% if section.settings.heading != blank %}
+      <h2 class="t-wild-title">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="t-wild-grid">
+      {% for i in (1..6) %}
+        {% assign prod_key = 'product_' | append: i %}
+        {% assign x_key = 'pos_x_' | append: i %}
+        {% assign y_key = 'pos_y_' | append: i %}
+        
+        {% assign prod = section.settings[prod_key] %}
+        {% assign pos_x = section.settings[x_key] %}
+        {% assign pos_y = section.settings[y_key] %}
+
+        {% if prod != blank %}
+          <div class="t-wild-card">
+            <div class="t-wild-image-wrapper">
+              <img src="{{ prod.featured_image | img_url: 'master' }}" alt="{{ prod.title }}">
+              <button class="t-hotspot-btn" style="left: {{ pos_x }}%; top: {{ pos_y }}%;">+</button>
+            </div>
+
+            <div class="t-quick-popup">
+              <button class="t-close-popup">&times;</button>
+              
+              <div class="t-popup-header">
+                <div class="t-popup-img">
+                  <img src="{{ prod.featured_image | img_url: 'medium' }}" alt="{{ prod.title }}">
+                </div>
+                <div class="t-popup-info">
+                  <h3 class="t-p-title">{{ prod.title }}</h3>
+                  <p class="t-p-price">{{ prod.price | money }}</p>
+                  <div class="t-p-desc">{{ prod.description | strip_html | truncatewords: 12 }}</div>
+                </div>
+              </div>
+
+              <script type="application/json" class="t-variants-json">
+                {{ prod.variants | json }}
+              </script>
+
+              <div class="t-p-variants">
+                {% for option in prod.options_with_values %}
+                  {% assign d_name = option.name | downcase %}
+                  {% if d_name == 'color' or d_name == 'colour' %}
+                    <div class="t-option-group">
+                      <label class="t-opt-label">{{ option.name }}</label>
+                      <div class="t-option-selector t-color-options">
+                        {% for value in option.values %}
+                          <button class="t-color-btn {% if forloop.first %}active{% endif %}" data-value="{{ value | escape }}">
+                            <span class="t-color-swatch" style="background-color: {{ value | downcase }};"></span>
+                            {{ value }}
+                          </button>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+
+                {% for option in prod.options_with_values %}
+                  {% assign d_name = option.name | downcase %}
+                  {% if d_name != 'color' and d_name != 'colour' %}
+                    <div class="t-option-group">
+                      <label class="t-opt-label">{{ option.name }}</label>
+                      <div class="t-select-wrapper">
+                        <select class="t-option-selector t-select-option">
+                          <option value="" disabled selected>Choose your size</option>
+                          {% for value in option.values %}
+                            <option value="{{ value | escape }}">{{ value }}</option>
+                          {% endfor %}
+                        </select>
+                        <span class="t-select-arrow">&#8964;</span>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+
+              <button class="t-add-to-cart-btn" data-variant-id="{{ prod.selected_or_first_available_variant.id }}">
+                ADD TO CART &rarr;
+              </button>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lustria&display=swap');
+
+  .t-wild-section {
+    padding: 60px 20px;
+    background: #FFFFFF;
+    font-family: 'Jost', sans-serif;
+  }
+  .t-wild-container {
+    max-width: 1339px;
+    margin: 0 auto;
+  }
+  .t-wild-title {
+    font-family: 'Lustria', serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 120%;
+    letter-spacing: 0px;
+    margin-bottom: 25px;
+    color: #111;
+    text-align: center;
+  }
+  .t-wild-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .t-wild-card {
+    position: relative;
+    background: #fff;
+    width: 100%;
+  }
+  .t-wild-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 250px;
+  }
+  .t-wild-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .t-hotspot-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    border: none;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+  .t-quick-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 420px;
+    background: #fff;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.4), 0 10px 30px rgba(0,0,0,0.2);
+    padding: 30px;
+    z-index: 9999;
+    box-sizing: border-box;
+  }
+  .t-close-popup {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    color: #000;
+  }
+  .t-popup-header {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    margin-top: 10px;
+  }
+  .t-popup-img img {
+    width: 90px;
+    height: 110px;
+    object-fit: cover;
+  }
+  .t-popup-info {
+    flex: 1;
+  }
+  .t-p-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    margin: 0 0 8px;
+  }
+  .t-p-price {
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    margin: 0 0 12px;
+  }
+  .t-p-desc {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: #444;
+    line-height: 1.4;
+  }
+  .t-p-variants {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  .t-opt-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #000;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 400;
+  }
+  .t-color-options {
+    display: flex;
+    width: 100%;
+  }
+  .t-color-btn {
+    position: relative;
+    flex: 1;
+    padding: 12px 12px 12px 28px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Jost', sans-serif;
+    text-align: left;
+    display: flex;
+    align-items: center;
+  }
+  .t-color-btn + .t-color-btn {
+    border-left: none;
+  }
+  .t-color-swatch {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    border-right: 1px solid #000;
+  }
+  .t-color-btn.active {
+    background: #000;
+    color: #fff;
+  }
+  .t-select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  .t-select-option {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #000;
+    font-size: 14px;
+    font-family: 'Jost', sans-serif;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .t-select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 16px;
+  }
+  .t-add-to-cart-btn {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 16px;
+    font-size: 14px;
+    font-family: 'Jost', sans-serif;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .t-add-to-cart-btn:hover {
+    background: #333;
+  }
+  .t-add-to-cart-btn:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+
+  @media screen and (min-width: 768px) {
+    .t-wild-section {
+      padding: 80px 50px;
+    }
+    .t-wild-title {
+      font-size: 36px;
+      margin-bottom: 35px;
+      text-align: left;
+    }
+    .t-wild-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .t-wild-card {
+      height: 444px;
+    }
+    .t-wild-image-wrapper {
+      height: 444px;
+    }
+    .t-hotspot-btn {
+      width: 26px;
+      height: 26px;
+      font-size: 18px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".t-wild-card");
+
+    cards.forEach(card => {
+      const hotspot = card.querySelector(".t-hotspot-btn");
+      const popup = card.querySelector(".t-quick-popup");
+      const closeBtn = card.querySelector(".t-close-popup");
+      const addBtn = card.querySelector(".t-add-to-cart-btn");
+      const priceEl = card.querySelector(".t-p-price");
+      const variantsData = JSON.parse(card.querySelector(".t-variants-json").textContent);
+
+      hotspot.addEventListener("click", () => {
+        document.querySelectorAll(".t-quick-popup").forEach(p => p.style.display = "none");
+        popup.style.display = "block";
+      });
+
+      closeBtn.addEventListener("click", () => {
+        popup.style.display = "none";
+      });
+
+      const updateVariant = () => {
+        let selected = [];
+        card.querySelectorAll(".t-option-selector").forEach(selector => {
+          if (selector.tagName === "SELECT") {
+            selected.push(selector.value);
+          } else {
+            const active = selector.querySelector(".active");
+            selected.push(active ? active.dataset.value : "");
+          }
+        });
+
+        const matched = variantsData.find(v => v.options.every((opt, i) => opt === selected[i]));
+
+        if (matched) {
+          addBtn.dataset.variantId = matched.id;
+          addBtn.disabled = !matched.available;
+          addBtn.textContent = matched.available ? "ADD TO CART \u2192" : "SOLD OUT";
+          priceEl.textContent = (matched.price / 100).toFixed(2) + "€";
+        }
+      };
+
+      card.querySelectorAll(".t-color-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const parent = e.target.closest(".t-color-options");
+          parent.querySelectorAll(".t-color-btn").forEach(b => b.classList.remove("active"));
+          e.currentTarget.classList.add("active");
+          updateVariant();
+        });
+      });
+
+      card.querySelectorAll(".t-select-option").forEach(select => {
+        select.addEventListener("change", updateVariant);
+      });
+
+      updateVariant();
+
+      addBtn.addEventListener("click", async () => {
+        const vId = addBtn.dataset.variantId;
+        const currentVariant = variantsData.find(v => v.id == vId);
+        
+        let items = [{ id: vId, quantity: 1 }];
+
+        const isBlack = currentVariant.options.some(o => o.toLowerCase() === "black");
+        const isMedium = currentVariant.options.some(o => o.toLowerCase() === "medium" || o.toLowerCase() === "m");
+
+        if (isBlack && isMedium) {
+          try {
+            const res = await fetch("/products/soft-winter-jacket.js");
+            if (res.ok) {
+              const extraProduct = await res.json();
+              if (extraProduct.variants && extraProduct.variants.length > 0) {
+                items.push({ id: extraProduct.variants[0].id, quantity: 1 });
+              }
+            }
+          } catch (err) {}
+        }
+
+        addBtn.textContent = "ADDING...";
+
+        fetch("/cart/add.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items })
+        })
+        .then(res => res.json())
+        .then(() => {
+          addBtn.textContent = "ADDED!";
+          setTimeout(() => {
+            addBtn.textContent = "ADD TO CART \u2192";
+            popup.style.display = "none";
+          }, 1500);
+        })
+        .catch(() => {
+          addBtn.textContent = "ERROR";
+        });
+      });
+    });
+  });
+</script>
