@@ -57,9 +57,10 @@
   ]
 }
 {% endschema %}
-
 <div class="t-banner-wrapper">
+  <!-- Main banner content container -->
   <div class="t-banner-main">
+    <!-- Banner text and heading section -->
     <div class="t-banner-text-box">
       <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
       <p class="t-banner-sub">
@@ -68,6 +69,7 @@
       </p>
     </div>
     
+    <!-- Responsive banner image section -->
     <div class="t-banner-image">
       {% if section.settings.banner_image != blank %}
         <picture>
@@ -81,12 +83,14 @@
       {% endif %}
     </div>
 
+    <!-- Call to action button with animation -->
     <a href="{{ section.settings.btn_link }}" class="t-anim-banner-btn">
       <span class="t-btn-text">{{ section.settings.btn_label }}</span>
       <span class="t-btn-arrow">&rarr;</span>
     </a>
   </div>
   
+  <!-- Banner bottom footer text bar -->
   <div class="t-banner-footer">
     <p class="t-footer-desktop">{{ section.settings.bottom_text }}</p>
     <p class="t-footer-mobile">{{ section.settings.bottom_text_mobile }}</p>
