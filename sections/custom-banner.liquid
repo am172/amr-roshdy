@@ -49,8 +49,6 @@
 
 <div class="t-banner-wrapper">
   <div class="t-banner-main">
-    <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
-    <p class="t-banner-sub">{{ section.settings.subtext }}</p>
     <div class="t-banner-image">
       {% if section.settings.banner_image != blank %}
         <img src="{{ section.settings.banner_image | img_url: 'master' }}" alt="{{ section.settings.heading }}">
@@ -58,9 +56,13 @@
         {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
       {% endif %}
     </div>
-    <a href="{{ section.settings.btn_link }}" class="t-banner-btn">
-      {{ section.settings.btn_label }} <span class="arrow-icon">&rarr;</span>
-    </a>
+    <div class="t-banner-content-box">
+      <h1 class="t-banner-heading">{{ section.settings.heading }}</h1>
+      <p class="t-banner-sub">{{ section.settings.subtext }}</p>
+      <a href="{{ section.settings.btn_link }}" class="t-banner-btn">
+        {{ section.settings.btn_label }} <span class="arrow-icon">&rarr;</span>
+      </a>
+    </div>
   </div>
   <div class="t-banner-footer">
     <p>{{ section.settings.bottom_text }}</p>
@@ -78,39 +80,37 @@
   }
   .t-banner-main {
     display: flex;
+    flex-direction: column-reverse;
+  }
+  .t-banner-image {
+    width: 100%;
+    display: flex;
+  }
+  .t-banner-image img, .t-banner-image svg {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .t-banner-content-box {
+    display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 40px 20px 20px 20px;
+    padding: 40px 20px 10px 20px;
   }
   .t-banner-heading {
-    order: 1;
     font-size: 32px;
     font-weight: 600;
     margin: 0 0 15px 0;
     color: #000000;
   }
   .t-banner-sub {
-    order: 2;
     font-size: 16px;
     line-height: 1.5;
     margin: 0 0 20px 0;
-    max-width: 400px;
     color: #000000;
   }
-  .t-banner-image {
-    order: 3;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-  .t-banner-image img, .t-banner-image svg {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
   .t-banner-btn {
-    order: 4;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -121,7 +121,6 @@
     font-size: 14px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-top: -40px;
     z-index: 10;
     transition: background-color 0.3s ease;
   }
@@ -151,37 +150,32 @@
   @media screen and (min-width: 768px) {
     .t-banner-main {
       display: grid;
-      grid-template-columns: 40% 55%;
-      gap: 20px 5%;
-      text-align: left;
-      padding: 60px 5%;
-      align-items: start;
-    }
-    .t-banner-heading {
-      grid-column: 1;
-      grid-row: 1;
-      font-size: 48px;
-      margin-bottom: 0;
-      align-self: end;
-    }
-    .t-banner-sub {
-      grid-column: 1;
-      grid-row: 2;
-      margin: 20px 0 40px 0;
-      align-self: start;
-    }
-    .t-banner-btn {
-      grid-column: 1;
-      grid-row: 3;
-      margin-top: 0;
-      align-self: start;
-      justify-self: start;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+      min-height: 500px;
     }
     .t-banner-image {
-      grid-column: 2;
-      grid-row: 1 / span 3;
-      align-self: center;
-      justify-content: flex-end;
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+      z-index: 1;
+    }
+    .t-banner-image img {
+      height: 100%;
+      object-position: center;
+    }
+    .t-banner-content-box {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+      z-index: 2;
+      align-self: end;
+      justify-self: start;
+      text-align: left;
+      align-items: flex-start;
+      padding: 40px 5%;
+      max-width: 50%;
+    }
+    .t-banner-heading {
+      font-size: 48px;
     }
   }
 </style>
