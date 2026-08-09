@@ -99,8 +99,11 @@
     grid-column: 1;
     grid-row: 1;
     text-align: center;
-    padding: 40px 20px 20px 20px;
+    padding: 40px 20px 30px 20px;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .t-banner-heading {
     font-size: 32px;
@@ -113,6 +116,7 @@
     line-height: 1.5;
     margin: 0;
     color: #000000;
+    max-width: 300px; /* ده اللي بيلم النص في الموبايل زي الفيجما */
   }
   .t-banner-image {
     grid-column: 1;
@@ -120,6 +124,10 @@
     width: 100%;
     display: flex;
     z-index: 1;
+  }
+  .t-banner-image picture {
+    width: 100%;
+    display: flex;
   }
   .t-banner-image img, .t-banner-image svg {
     width: 100%;
@@ -131,7 +139,7 @@
     grid-row: 2;
     justify-self: center;
     align-self: end;
-    margin-bottom: 15%;
+    margin-bottom: 30px;
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -192,42 +200,47 @@
     margin: 0;
   }
 
+  /* تنسيق الديسك توب */
   @media screen and (min-width: 768px) {
     .t-banner-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
       padding: 80px 5%;
       min-height: 550px;
-      grid-template-rows: auto auto 1fr;
     }
     .t-banner-image {
-      grid-row: 1 / span 3;
-      grid-column: 1 / -1;
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: 1;
     }
     .t-banner-image img {
       height: 100%;
-      object-position: right center;
+      object-position: center;
     }
     .t-banner-text-box {
-      grid-row: 1;
-      grid-column: 1;
-      text-align: left;
+      position: relative;
+      z-index: 2;
       padding: 0;
-      max-width: 50%;
-      align-self: end;
+      max-width: 45%;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .t-banner-sub {
+      max-width: 100%; 
     }
     .t-banner-heading {
       font-size: 48px;
     }
     .t-anim-banner-btn {
-      grid-row: 2;
-      grid-column: 1;
-      justify-self: start;
-      align-self: start;
-      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+      align-self: flex-start;
+      margin-top: 25px;
       margin-bottom: 0;
     }
   }

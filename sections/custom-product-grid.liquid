@@ -91,7 +91,10 @@
                       <label class="t-opt-label">{{ option.name }}</label>
                       <div class="t-option-selector t-color-options">
                         {% for value in option.values %}
-                          <button class="t-color-btn {% if forloop.first %}active{% endif %}" data-value="{{ value | escape }}">{{ value }}</button>
+                          <button class="t-color-btn {% if forloop.first %}active{% endif %}" data-value="{{ value | escape }}">
+                            <span class="t-color-swatch" style="background-color: {{ value | downcase }};"></span>
+                            {{ value }}
+                          </button>
                         {% endfor %}
                       </div>
                     </div>
@@ -139,7 +142,7 @@
     font-weight: 400;
     margin-bottom: 25px;
     color: #111;
-    text-align: center;
+    text-align: left;
   }
   .t-wild-grid {
     display: grid;
@@ -180,24 +183,28 @@
   }
   .t-quick-popup {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
+    width: 90%;
+    max-width: 340px;
     background: #fff;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    padding: 15px;
-    z-index: 10;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.4), 0 10px 30px rgba(0,0,0,0.2);
+    padding: 20px;
+    z-index: 9999;
+    box-sizing: border-box;
   }
   .t-close-popup {
     position: absolute;
-    top: 5px;
-    right: 10px;
+    top: 10px;
+    right: 15px;
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 24px;
+    line-height: 1;
     cursor: pointer;
+    color: #333;
   }
   .t-popup-header {
     display: flex;
@@ -214,17 +221,17 @@
     flex: 1;
   }
   .t-p-title {
-    font-size: 13px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 500;
     margin: 0 0 5px;
   }
   .t-p-price {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     margin: 0 0 8px;
   }
   .t-p-desc {
-    font-size: 10px;
+    font-size: 11px;
     color: #555;
     line-height: 1.3;
   }
@@ -235,22 +242,38 @@
     margin-bottom: 15px;
   }
   .t-opt-label {
-    font-size: 11px;
+    font-size: 12px;
     margin-bottom: 5px;
     display: block;
+    font-weight: 500;
   }
   .t-color-options {
     display: flex;
     width: 100%;
   }
   .t-color-btn {
+    position: relative;
     flex: 1;
-    padding: 8px;
+    padding: 10px 10px 10px 22px;
     border: 1px solid #000;
     background: #fff;
     color: #000;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+  }
+  .t-color-btn + .t-color-btn {
+    border-left: none;
+  }
+  .t-color-swatch {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    border-right: 1px solid #000;
   }
   .t-color-btn.active {
     background: #000;
@@ -258,9 +281,9 @@
   }
   .t-select-option {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc;
-    font-size: 12px;
+    font-size: 13px;
     background: #fff;
     cursor: pointer;
   }
@@ -269,8 +292,8 @@
     background: #000;
     color: #fff;
     border: none;
-    padding: 12px;
-    font-size: 11px;
+    padding: 14px;
+    font-size: 12px;
     letter-spacing: 1px;
     cursor: pointer;
     transition: background 0.3s;
@@ -290,6 +313,7 @@
     .t-wild-title {
       font-size: 28px;
       margin-bottom: 30px;
+      text-align: center;
     }
     .t-wild-grid {
       grid-template-columns: repeat(3, 1fr);
@@ -352,7 +376,7 @@
         btn.addEventListener("click", (e) => {
           const parent = e.target.closest(".t-color-options");
           parent.querySelectorAll(".t-color-btn").forEach(b => b.classList.remove("active"));
-          e.target.classList.add("active");
+          e.currentTarget.classList.add("active");
           updateVariant();
         });
       });
