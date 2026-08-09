@@ -187,6 +187,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "t:names.product_list",
       "settings": {
         "collection": "all",
@@ -207,9 +208,23 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "custom_product_grid_3mtqjP": {
+      "type": "custom-product-grid",
+      "name": "Tisso Wild Grid",
+      "settings": {
+        "heading": "Tisso vison in the wild",
+        "product_1": "black-leather-bag",
+        "product_2": "blue-silk-tuxedo",
+        "product_3": "chequered-red-shirt",
+        "product_4": "classic-varsity-top",
+        "product_5": "dark-denim-top",
+        "product_6": "ocean-blue-shirt"
+      }
     }
   },
   "order": [
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "custom_product_grid_3mtqjP"
   ]
 }
